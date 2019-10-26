@@ -22,5 +22,6 @@ elseif($request-> isDelete())
 {
 	$results = array("resource" => "challenge", "method" => "delete", "request_vars" = $vars);
 }
+echo(json_encode($results));
 
 ?>

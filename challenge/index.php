@@ -2,7 +2,7 @@
 include_once("../rest.php");
 
 $request = new RestRequest();
-$var = $request->getRequestVariables();
+$vars = $request->getRequestVariables();
 if($request-> isGet())
 {
 	$results = array("resource" => "challenge", "method" => "get", "request_vars" = $vars);

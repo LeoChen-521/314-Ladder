@@ -8,7 +8,7 @@ $db = new PDO("pgsql:dbname=ladder_xchen13 host=localhost password=1846485 user=
 //$db = new PDO("pgsql:dbname=ladder host=localhost password=314dev user=dev");
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$results;
+$results = array();
 
 if($request->isGet())
 {

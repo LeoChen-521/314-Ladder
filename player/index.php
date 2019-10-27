@@ -106,57 +106,66 @@ elseif($request->isPost())
 		$username = $vars["username"];
 		$password = $vars["password"];
 
-		if(!preg_match("/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/", $phone))
-		{
-			$results = array("error_text" => "Invalid phone number.");
-		}
-		if(filter_var($email, FILTER_VALIDATE_EMAIL))
+		// if(!preg_match("/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/", $phone))
+		// {
+		// 	$results = array("error_text" => "Invalid phone number.");
+		// }
+		if(!filter_var($email, FILTER_VALIDATE_EMAIL))
 		{
 			$results = array("error_text" => "Invalid email address.");
+			http_response_code(400);
+		}
+		else
+		{
+			//unique username
+			$username_check_sql = "select count(*) from player where username = ?";
+			$statement_check_username = $db->prepare($username_check_sql);
+			$statement_check_username->execute([$username]);
+			$check_username_results_array = $statement_check_username->fetch(PDO::FETCH_ASSOC);
+			$check_username_results = intval($check_username_results_array["count"]);
+
+			//if the username is already exist, error text.
+			if($check_username_results !== 0)
+			{
+				$results = array("error_text" => "This username has been used.");
+				http_response_code(400);
+			}
+
+			try
+			{
+				$db->beginTransaction();
+
+				$highest_rank_sql = "select max(rank) from player";
+				$statement_highest_rank = $db->prepare($highest_rank_sql);
+				$statement_highest_rank->execute();
+				$highest_rank_result = $statement_highest_rank->fetch(PDO::FETCH_ASSOC);
+
+				$current_rank = $highest_rank_result["max"] + 1;
+
+
+				$sql = "insert into player (name, email, rank, phone, username, password) values (?, ?, ?, ?, ?, ?)";
+				$statement = $db->prepare($sql);
+				$statement->execute([$name, $email, $current_rank, $phone, $username, $password]);
+
+				$db->commit();
+
+				$results = array("error_text" => "");
+				http_response_code(202);
+			}
+			catch(PDOException $e)//400
+			{
+				$results = array("error_text" => $e->getMessage());
+				http_response_code(400);
+			}	
 		}
 	}
 	else
 	{
 		$results = array("error_text" => "Missing input(s).");
+		http_response_code(400);
 	}
 
-	//unique username
-	$username_check_sql = "select count(*) from player where username = ?";
-	$statement_check_username = $db->prepare($username_check_sql);
-	$statement_check_username->execute([$username]);
-	$check_username_results_array = $statement_check_username->fetch(PDO::FETCH_ASSOC);
-	$check_username_results = intval($check_username_results_array["count"]);
-
-	//if the username is already exist, error text.
-	if($check_username_results !== 0)
-	{
-		$results = array("error_text" => "This username has been used.");
-	}
-
-	try
-	{
-		$db->beginTransaction();
-
-		$highest_rank_sql = "select max(rank) from player";
-		$statement_highest_rank = $db->prepare($highest_rank_sql);
-		$statement_highest_rank->execute();
-		$highest_rank_result = $statement_highest_rank->fetch(PDO::FETCH_ASSOC);
-
-		$current_rank = $highest_rank_result + 1;
-
-
-		$sql = "insert into player (name, email, rank, phone, username, password) values (?, ?, ?, ?, ?)";
-		$statement = $db->prepare($sql);
-		$statement->execute($name, $email, $current_rank, $phone, $username, $password);
-
-		$db->commit();
-
-		$results = array("error_text" => "202");
-	}
-	catch(PDOException $e)//400
-	{
-		$results = array("error_text" => $e->getMessage());
-	}	
+	
 	
 	//$results = array("resource" => "player", "method" => "POST", "request_vars" => $vars);
 }

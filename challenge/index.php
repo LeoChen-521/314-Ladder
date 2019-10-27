@@ -3,24 +3,24 @@ include_once("../rest.php");
 
 $request = new RestRequest();
 $vars = $request->getRequestVariables();
-if($request-> isGet())
+if($request->isGet())
 {
-	$results = array("resource" => "challenge", "method" => "get", "request_vars" = $vars);
+	$results = array("resource" => "challenge", "method" => "GET", "request_vars" = $vars);
 }
 
-elseif($request-> isPost())
+elseif($request->isPost())
 {
-	$results = array("resource" => "challenge", "method" => "post", "request_vars" = $vars);
+	$results = array("resource" => "challenge", "method" => "POST", "request_vars" = $vars);
 }
 
-elseif($request-> isPut())
+elseif($request->isPut())
 {
-	$results = array("resource" => "challenge", "method" => "put", "request_vars" = $vars);
+	$results = array("resource" => "challenge", "method" => "PUT", "request_vars" = $vars);
 }
 
-elseif($request-> isDelete())
+elseif($request->isDelete())
 {
-	$results = array("resource" => "challenge", "method" => "delete", "request_vars" = $vars);
+	$results = array("resource" => "challenge", "method" => "DELETE", "request_vars" = $vars);
 }
 echo(json_encode($results));
 

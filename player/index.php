@@ -8,6 +8,8 @@ $db = new PDO("pgsql:dbname=ladder_xchen13 host=localhost password=1846485 user=
 //$db = new PDO("pgsql:dbname=ladder host=localhost password=314dev user=dev");
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+$results;
+
 if($request->isGet())
 {
 	if (count($vars) !== 1)
@@ -106,10 +108,11 @@ elseif($request->isPost())
 		$username = $vars["username"];
 		$password = $vars["password"];
 
-		// if(!preg_match("/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/", $phone))
-		// {
-		// 	$results = array("error_text" => "Invalid phone number.");
-		// }
+		if(!preg_match("/^[0-9]{10}+$/", $phone))
+		{
+			$results = array("error_text" => "Invalid phone number.");
+			http_response_code(400);
+		}
 		if(!filter_var($email, FILTER_VALIDATE_EMAIL))
 		{
 			$results = array("error_text" => "Invalid email address.");

@@ -64,20 +64,20 @@ if($request->isGet())
 				$game_win_percentage_array = ["game_win_percentage" => $statement_game_win_percentage_result["round"]];
 
 
-				$winning_margin_sql = "select round(avg(winner_score - loser_score),2) from game where winner = ?";
+				$winning_margin_sql = "select avg(winner_score - loser_score) from game where winner = ?";
 				$statement_winning_margin = $db->prepare($winning_margin_sql);
 				$statement_winning_margin->execute([$username]);
 				$statement_winning_margin_result = $statement_winning_margin->fetch(PDO::FETCH_ASSOC);
 
-				$winning_margin_array = ["winning_margin" => $statement_winning_margin_result["round"]];
+				$winning_margin_array = ["winning_margin" => $statement_winning_margin_result["avg"]];
 
 
-				$losing_margin_sql = "select round(avg(winner_score - loser_score),2) from game where loser = ?";
+				$losing_margin_sql = "select avg(winner_score - loser_score) from game where loser = ?";
 				$statement_losing_margin = $db->prepare($losing_margin_sql);
 				$statement_losing_margin->execute([$username]);
 				$statement_losing_margin_result = $statement_losing_margin->fetch(PDO::FETCH_ASSOC);
 
-				$losing_margin_array = ["losing_margin" => $statement_losing_margin_result["round"]];
+				$losing_margin_array = ["losing_margin" => $statement_losing_margin_result["avg"]];
 
 				// $results = array_merge($player_results, $statement_match_win_percentage_result, $statement_game_win_percentage_result, $statement_winning_margin_result, $statement_losing_margin_result);
 				$results = array_merge($player_results, $match_win_percentage_array, $game_win_percentage_array, $winning_margin_array, $losing_margin_array);

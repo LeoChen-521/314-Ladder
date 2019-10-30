@@ -37,7 +37,6 @@ if($request->isGet())
 		if($check_results === 0)
 		{
 			$results = array("player" => "");
-			http_response_code(400);
 		}
 		else
 		{
@@ -141,9 +140,10 @@ elseif($request->isPost())
 	}
 	else
 	{
-		// If there is no "name" key word, print the error.
+		// If there is no "email" key word, print the error.
 		$results = array("error_text" => "No email given");
 		$has_error = true;
+		http_response_code(400);
 	}
 
 
@@ -151,7 +151,6 @@ elseif($request->isPost())
 	if(array_key_exists("phone", $vars))
 	{
 		$phone = $vars["phone"];
-
 		// If there is a "phone" key word, but the format is bad, print the error.
 		if(!preg_match("/^[0-9]{10}+$/", $phone))
 		{

@@ -11,14 +11,16 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $no_username_key = "No username given";
 $no_games_key = "No game given";
-$no_winner_key = "No winner given";
-$no_loser_key = "No loser given";
-$no_winner_score_key = "No winner score given";
-$no_loser_score_key = "No loser score given";
+$no_winner_key = "Missing winner name";
+$no_loser_key = "Missing loser name";
+$no_winner_score_key = "Missing winner score";
+$no_loser_score_key = "Missing loser score";
 $no_played_date_key = "No played date given";
 $no_player1_key = "No player1 given";
 $no_player2_key = "No player2 given";
 
+$no_such_username = "No username found";
+$no_date_found = "No date found";
 $no_winner_username = "Username of winner does not exist";
 $no_loser_username = "Username of loser does not exist";
 $no_player1_username = "Username of player1 does not exist";
@@ -36,27 +38,46 @@ if($request->isGet())
 	{
 		//username is the same format as winner and loser.
 		$username = $vars["username"];
+		if(!username_exists($db, $username))
+		{
+			$results = array("error_text" => $no_such_username);
+			$has_error = true;
+			http_response_code(400);
+		}
+		//$data = $vars[]
+		//echo(json_encode($vars));
 		http_response_code(200);
 		// check if the played date given (optional)
 		if(array_key_exists("played", $vars))
 		{
 			$played_date = $vars["played"];
-			//Check date format
-			// if() // if bad
-			// {
-			// 	$results = array("error_text" => $bad_played_date_format);
-			// 	http_response_code(400);
-			// }
-			//else
+
+			echo $played_date;
+			// Check date format
+			if(date_format_isValid($played_date)) // if bad
 			{
-				//played date???
+				if (!read_date_exist($db, $username, $played_date))
+				{
+					$results = array("error_text" => "date does not exist");
+					$has_error = true;
+					http_response_code(400);
+				}
+			}
+			else
+			{
+				$results = array("error_text" => $bad_played_date_format);
+				$has_error = true;
+				http_response_code(400);
+			}
+			if(!$has_error)
+			{
 				try
 				{
 					$sql_game_wlp = "select winner, loser, played, number, winner_score, loser_score from game where (winner = ? or loser = ?) and played = ?";
 					//prepare the statement
 					$statement_game_wlp = $db->prepare($sql_game_wlp);
 					//run the query
-					$statement_game_wlp->execute([$username, $username, $played]);
+					$statement_game_wlp->execute([$username, $username, $played_date]);
 					//get the results
 					$results = $statement_player->fetchAll(PDO::FETCH_ASSOC);
 
@@ -73,7 +94,7 @@ if($request->isGet())
 		{
 			try
 			{
-				$sql_game_wl = "select winner, loser, number, winner_score, loser_score from game where winner = ? or loser = ?"; // add date?
+				$sql_game_wl = "select winner, loser, played, number, winner_score, loser_score from game where winner = ? or loser = ?"; // add date?
 				//prepare the statement
 				$statement_game_wl = $db->prepare($sql_game_wl);
 				//run the query
@@ -97,7 +118,7 @@ if($request->isGet())
 	}
 }
 
-// Create a new match (input only 2 usernames?)
+// Create a new match
 elseif($request->isPost())
 {
 	$has_error = false;
@@ -109,13 +130,13 @@ elseif($request->isPost())
 		if(array_key_exists("played", $vars))
 		{
 			$played_date = $vars["played"];
-			// Check played date format
-			// if()
-			// {
-			// 	$results = array("error_text" => $bad_played_date_format);
-			// 	$has_error = true;
-			// 	http_response_code(400);
-			// }
+			//Check played date format
+			if(!date_format_isValid($played_date))
+			{
+				$results = array("error_text" => $bad_played_date_format);
+				$has_error = true;
+				http_response_code(400);
+			}
 		}
 		else
 		{
@@ -134,6 +155,8 @@ elseif($request->isPost())
 					$results = array("error_text" => $no_winner_username);
 					$has_error = true;
 					http_response_code(400);
+					echo(json_encode($results));
+					return;
 				}
 			}
 			else
@@ -151,6 +174,8 @@ elseif($request->isPost())
 					$results = array("error_text" => $no_loser_username);
 					$has_error = true;
 					http_response_code(400);
+					echo(json_encode($results));
+					return;
 				}
 			}
 			else
@@ -168,6 +193,8 @@ elseif($request->isPost())
 					$results = array("error_text" => "Invalid winner score");
 					$has_error = true;
 					http_response_code(400);
+					echo(json_encode($results));
+					return;
 				}
 			}
 			else
@@ -180,11 +207,13 @@ elseif($request->isPost())
 			if(array_key_exists("loser_score", $games[$i]))
 			{
 				$loser_score = $games[$i]["loser_score"];
-				if ($winner_score < 0 && $winner_score === 10)
+				if ($loser_score < 0 || $loser_score === 10)
 				{
 					$results = array("error_text" => "Invalid loser score");
 					$has_error = true;
 					http_response_code(400);
+					echo(json_encode($results));
+					return;
 				}
 			}
 			else
@@ -233,7 +262,6 @@ elseif($request->isPost())
 				$statement->execute([$games[$i-1]["winner"], $games[$i-1]["loser"], $played_date, $i, $games[$i-1]["winner_score"], $games[$i-1]["loser_score"]]);
 
 			}
-			
 
 			$db->commit();
 
@@ -266,6 +294,8 @@ elseif($request->isDelete())
 			$results = array("error_text" => $no_player1_username);
 			$has_error = true;
 			http_response_code(400);
+			echo(json_encode($results));
+			return;
 		}
 	}
 	else
@@ -283,6 +313,8 @@ elseif($request->isDelete())
 			$results = array("error_text" => $no_player2_username);
 			$has_error = true;
 			http_response_code(400);
+			echo(json_encode($results));
+			return;
 		}
 	}
 	else
@@ -295,17 +327,23 @@ elseif($request->isDelete())
 	if(array_key_exists("played", $vars))
 	{
 		$played_date = $vars["played"];
-		// Check date format
-		// if()
-		// {
+		//Check date format
 
-		// }
-		// else
-		// {
-		// 	$results = array("error_text" => $no_played_date_key);
-		// 	$has_error = true;
-		// 	http_response_code(400);
-		// }
+		if(date_format_isValid($played_date))
+		{
+			if (!delete_date_exist($db, $played_date, $player1, $player2))
+			{
+				$results = array("error_text" => $no_date_found);
+				$has_error = true;
+				http_response_code(400);
+			}
+		}
+		else
+		{
+			$results = array("error_text" => $bad_played_date_format);
+			$has_error = true;
+			http_response_code(400);
+		}
 	}
 	else
 	{
@@ -458,22 +496,42 @@ function determine_match_loser($vars, $games)
 
 	return $loser_username;
 }
-// function validateDate($date)
-// {
-//     if (preg_match('/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})Z$/', $date, $parts) == true) 
-//     {
-//         $time = gmmktime($parts[4], $parts[5], $parts[6], $parts[2], $parts[3], $parts[1]);
+// Check date format
+function date_format_isValid($played_date)
+{
+	$isValid = false;
+	if(preg_match('/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})$/', $played_date))
+	{
+		$isValid = true;
+	}
+	return $isValid;
+}
 
-//         $input_time = strtotime($date);
-//         if ($input_time === false) return false;
+function delete_date_exist($db, $played_date, $player1, $player2)
+{
+	$exists = false;
+	$date_check_sql = "select count(*) from game where (winner = ? and loser = ? and played = ?) or (winner = ? and loser = ? and played = ?)";
+	$statement_check_date = $db->prepare($date_check_sql);
+	$statement_check_date->execute([$player1, $player2, $played_date, $player2, $player1, $played_date]);
+	$check_date_results_array = $statement_check_date->fetch(PDO::FETCH_ASSOC);
+	$exists = intval($check_date_results_array["count"]) != 0;
 
-//         return $input_time == $time;
-//     } 
-//     else 
-//     {
-//         return false;
-//     }
-// }
+	return $exists;
+}
+
+function read_date_exist($db, $played_date, $username)
+{
+	$exists = false;
+	$date_check_sql = "select count(*) from game where username = ? and played = ?";
+	$statement_check_date = $db->prepare($date_check_sql);
+	$statement_check_date->execute([$username, $played_date]);
+	$check_date_results_array = $statement_check_date->fetch(PDO::FETCH_ASSOC);
+	$exists = intval($check_date_results_array["count"]) != 0;
+
+	return $exists;
+}
+
+
 
 
 

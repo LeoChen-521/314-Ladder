@@ -58,7 +58,7 @@ if($request->isGet())
 			{
 				if (!read_date_exist($db, $username, $played_date))
 				{
-					$results = array("error_text" => $no_date_found;
+					$results = array("error_text" => $no_date_found);
 					$has_error = true;
 					http_response_code(400);
 				}
@@ -126,7 +126,7 @@ elseif($request->isPost())
 	{
 		//array games
 		$games = $vars["games"];
-
+		// Check if the played date key given 
 		if(array_key_exists("played", $vars))
 		{
 			$played_date = $vars["played"];
@@ -145,6 +145,7 @@ elseif($request->isPost())
 			http_response_code(400);
 		}
 
+		// Create the match by posting the games 1 by 1.
 		for($i=0; $i<count($games); $i++)
 		{
 			if(array_key_exists("winner", $games[$i]))
@@ -236,6 +237,7 @@ elseif($request->isPost())
 	{
 		try
 		{
+			// Shift the ranks, if lower rank player wins higher rank player.
 			$match_winner = determine_match_winner($vars, $games);
 			$match_loser = determine_match_loser($vars, $games);
 
@@ -286,9 +288,11 @@ elseif($request->isPut())
 elseif($request->isDelete())
 {
 	$has_error = false;
+	// Check if the player1's key given
 	if(array_key_exists("player1", $vars))
 	{
 		$player1 = $vars["player1"];
+		// Check if the username of player1 exists.
 		if(!username_exists($db, $player1))
 		{
 			$results = array("error_text" => $no_player1_username);
@@ -305,9 +309,11 @@ elseif($request->isDelete())
 		http_response_code(400);
 	}
 
+	// Check if player2's key given.
 	if(array_key_exists("player2", $vars))
 	{
 		$player2 = $vars["player2"];
+		// Check if player2 exist.
 		if(!username_exists($db, $player2))
 		{
 			$results = array("error_text" => $no_player2_username);
@@ -324,13 +330,14 @@ elseif($request->isDelete())
 		http_response_code(400);
 	}
 
+	// Check if the played date key given
 	if(array_key_exists("played", $vars))
 	{
 		$played_date = $vars["played"];
 		//Check date format
-
 		if(date_format_isValid($played_date))
 		{
+			// Check if the date exists
 			if (!delete_date_exist($db, $played_date, $player1, $player2))
 			{
 				$results = array("error_text" => $no_date_found);
@@ -431,6 +438,7 @@ function shift_after_increase_player_rank($db, $current_rank, $rank)
 	$db->commit();
 }
 
+// Find the loser of a match
 function determine_match_winner($vars, $games)
 {
 	$winner_username;
@@ -464,6 +472,7 @@ function determine_match_winner($vars, $games)
 	return $winner_username;
 }
 
+// Find the loser of a match
 function determine_match_loser($vars, $games)
 {
 	$loser_username;
@@ -507,6 +516,7 @@ function date_format_isValid($played_date)
 	return $isValid;
 }
 
+// Check if the date exist. 2 players involved.
 function delete_date_exist($db, $played_date, $player1, $player2)
 {
 	$exists = false;
@@ -519,6 +529,7 @@ function delete_date_exist($db, $played_date, $player1, $player2)
 	return $exists;
 }
 
+// Check if the date exist. 1 username
 function read_date_exist($db, $played_date, $username)
 {
 	$exists = false;
@@ -530,12 +541,5 @@ function read_date_exist($db, $played_date, $username)
 
 	return $exists;
 }
-
-
-
-
-
-
-
 echo(json_encode($results));
 ?>

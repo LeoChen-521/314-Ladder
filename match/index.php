@@ -5,8 +5,8 @@ include_once("../rest.php");
 $request = new RestRequest();
 $vars = $request->getRequestVariables();
 
-//$db = new PDO("pgsql:dbname=ladder_xchen13 host=localhost password=1846485 user=xchen13");
-$db = new PDO("pgsql:dbname=ladder host=localhost password=314dev user=dev");
+$db = new PDO("pgsql:dbname=ladder_xchen13 host=localhost password=1846485 user=xchen13");
+//$db = new PDO("pgsql:dbname=ladder host=localhost password=314dev user=dev");
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $no_username_key = "No username given";
@@ -58,7 +58,7 @@ if($request->isGet())
 			{
 				if (!read_date_exist($db, $username, $played_date))
 				{
-					$results = array("error_text" => "date does not exist");
+					$results = array("error_text" => $no_date_found;
 					$has_error = true;
 					http_response_code(400);
 				}

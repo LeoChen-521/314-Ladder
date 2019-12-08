@@ -20,11 +20,11 @@
 						//request type
 						type : "POST",
 						
-						contentType: "application/json;charset=UTF-8",
+						//contentType: "application/json;charset=UTF-8",
 						
 						url : "login",
 						
-						data : {"username":username,"password":password},
+						data : "username=" + username + "&" + "password=" + password,
 						
 						success : function(result) {
 						

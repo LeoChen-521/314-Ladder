@@ -1,3 +1,105 @@
-Hello, 314
-This is an online game that players can challenge each other to compete rank.
-Any users who sign up and access to the system can play.
+<!DOCTYPE html>
+
+<html lang = "en">
+	<head>
+		<script src="jquery-3.4.1.min.js"></script>
+		<title> hello </title>
+
+		<script>
+			$(document).ready(function() {
+				$("#js_ajax_test").click(function() {
+					// 获取username
+					var username = $("input[name='username']").val();
+					// 获取password
+					var password = $("input[name='password']").val();
+
+					alert("username == " + username + "/r/n password == " + password);
+
+					// ajax submit
+					$.ajax({
+						//request type
+						type : "GET",
+						
+						contentType: "application/json;charset=UTF-8",
+						
+						url : "http://localhost/314-ladder/login/",
+						
+						data : {"username":username,"password":password},
+						
+						success : function(result) {
+						
+							$("#myForm").submit();
+						},
+						
+						error : function(e){
+							console.log(e.status);
+							console.log(e.responseText);
+						}
+					});
+
+				});
+
+			});
+		</script>
+		<script>
+		
+			function getPlayer() {
+				var userName = document.getElementById("js_ajax_test").value;
+				alert(userName);
+				// alert("HI1");
+				// var xhttp = new XMLHttpRequest();
+				// xhttp.onreadystatechange = function()
+				// {
+				// 	alert("HII");
+				// 	document.getElementById("demo").innerHTML = this.responseText;
+				// 	if (this.readyState == 4 && this.status == 200) 
+				// 	{       
+				// 		alert("HI2");
+				// 		document.getElementById("demo").innerHTML = this.responseText;
+				// 	}   
+				// };   
+				// xhttp.open("POST", "/login/?username=rmills1", true);   
+				// xhttp.send();
+				// var request = XMLHttpRequest(); // make the request.
+				// request.open(“GET”, "http://web.cs.georgefox.edu/~xchen13/314-Ladder/match/?username=rmills1");
+				// request.onreadystatechange = function()
+				// {
+				// 	if(this.readystate == 4)
+				// 	{
+				// 		var response = JSON.parse(this.responseText);
+				// 		if (this.status == 200)
+				// 		{
+				// 			// update page
+				// 			alert("HI");
+				// 			alert(player.name);
+				// 			//call update
+
+				// 		}
+				// 	}
+				// }
+				// request.send(JSON.stringify({.  }));
+			}
+
+		</script>
+	</head>
+	<body>
+		<h1> Please log in your account </h1>
+		<p id="demo"></p>
+		<!--<form name = 'foo' method = 'POST' action = '/html/index.php'> <!-->
+		<form name = "myForm" action = "/html/form.php" method="post">
+			<div>
+				<label>Username:</label>
+				<input type = "text" name = "username" required/>
+			</div>
+			<div>
+				<label>Password:</label>
+				<input type = "password" name = "password" required/>  
+			</div>
+			<div>
+				<button id = "js_ajax_test">Log in</button>
+				<input type="reset" value="reset">
+			</div>
+		</form>
+	</body>
+
+</html>

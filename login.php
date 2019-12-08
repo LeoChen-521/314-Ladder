@@ -19,8 +19,8 @@
 		
       // if($count == 1) 
       // {
-         session_register("myusername");
-         $_SESSION['login_user'] = $myusername;
+         // session_register("myusername");
+         // $_SESSION['login_user'] = $myusername;
          
          header("location: welcome.php");
       // }else {

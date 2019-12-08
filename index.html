@@ -22,20 +22,21 @@
 						
 						contentType: "application/json;charset=UTF-8",
 						
-						url : "http://localhost/314-ladder/login/index.php",
+						url : "http://web.cs.georgefox.edu/~xchen13/314-Ladder/login/index.php",
 						
 						data : {"username":username,"password":password},
 						
 						success : function(result) {
 						
 							//$("#myForm").submit();
-							alert(result);
+							alert("result2");
 						},
 						
 						error : function(e){
-							alert(e);
-							// console.log(e.status);
-							// console.log(e.responseText);
+							// alert(e);
+							console.log(e);
+							console.log(e.status);
+							console.log(e.responseText);
 						}
 					});
 

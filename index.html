@@ -8,9 +8,9 @@
 		<script>
 			$(document).ready(function() {
 				$("#js_ajax_test").click(function() {
-					// 获取username
+					// Getusername
 					var username = $("input[name='username']").val();
-					// 获取password
+					// Get password
 					var password = $("input[name='password']").val();
 
 					alert("username == " + username + "/r/n password == " + password);
@@ -18,22 +18,24 @@
 					// ajax submit
 					$.ajax({
 						//request type
-						type : "GET",
+						type : "POST",
 						
 						contentType: "application/json;charset=UTF-8",
 						
-						url : "http://localhost/314-ladder/login/",
+						url : "http://localhost/314-ladder/login/index.php",
 						
 						data : {"username":username,"password":password},
 						
 						success : function(result) {
 						
-							$("#myForm").submit();
+							//$("#myForm").submit();
+							alert(result);
 						},
 						
 						error : function(e){
-							console.log(e.status);
-							console.log(e.responseText);
+							alert(e);
+							// console.log(e.status);
+							// console.log(e.responseText);
 						}
 					});
 

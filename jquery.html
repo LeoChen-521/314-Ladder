@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+		<script>
+
+			function show_results(response)
+			{
+				//get the output area
+				var out = document.getElementById("output");
+
+				//reset the output area
+				out.innerHTML = "";
+
+				for(key in response)
+				{
+					out.innerHTML += "key: " + key + " value: " + response[key] + "<br /> + " + "out: " + out;
+				}
+			}
+
+			function get_form_data()
+			{
+				//get the form data
+				var form = document.forms.example;
+
+				var data = {username:form.username.value, 
+				password:form.password.value};
+
+				/**
+				var data = {username:form.username.value, 
+				password:form.password.value,
+				addedField:form.addedField.value};
+				*/
+
+				return JSON.stringify(data);
+			}
+
+			$(function()
+			{
+				//var url = "http://localhost/resources/php/json-echo.php";
+				//var url = "http://web.cs.georgefox.edu/json-echo.php";
+				var url = "localhost/314-Ladder/match/"
+
+				//make the button into a jquery button
+				$("button").button();
+
+				//setup ajax call
+				$("button").click(function()
+				{
+					alert("clicked!");
+					// $.ajax({
+					// 	url: url,
+					// 	type: "GET",
+					// 	data: get_form_data(),
+					// 	contentType: "application/json; charset=utf-8",
+					// 	dataType: "json",
+					// 	success: show_results
+					// });
+					$.ajax({
+						url: "ajax.aspx",
+						type: "get", 
+					    data:{   username:"LC4"     },   
+					    success: function(response) {alert("HI");        },   
+					    error: function(xhr) 
+					  	{        } });
+				});
+			}
+			);
+
+		</script>
+	</head>
+
+	<body>
+		<form name="example" action="">
+			<label> Username <input name="username" type="text" /> </label>
+			<label> Password <input name="password" type="password" /> </label> <br /> <br />
+
+			<label> Added field <input name="addedField" type="text" /> </label> <br /> <br />
+			<button onclick="return false;">Ajax Call</button>
+		</form>
+		<br />
+		<br />
+		<div id="output">
+		</div>
+	</body>
+</html>

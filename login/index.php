@@ -6,8 +6,8 @@ include_once("../rest.php");
 $request = new RestRequest();
 $vars = $request->getRequestVariables();
 
-//$db = new PDO("pgsql:dbname=ladder_xchen13 host=localhost password=1846485 user=xchen13");
-$db = new PDO("pgsql:dbname=ladder host=localhost password=314dev user=dev");
+$db = new PDO("pgsql:dbname=ladder_xchen13 host=localhost password=1846485 user=xchen13");
+//$db = new PDO("pgsql:dbname=ladder host=localhost password=314dev user=dev");
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $no_username_key = "Username is not provided.";

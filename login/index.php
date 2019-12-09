@@ -6,8 +6,8 @@ include_once("../rest.php");
 $request = new RestRequest();
 $vars = $request->getRequestVariables();
 
-$db = new PDO("pgsql:dbname=ladder_xchen13 host=localhost password=1846485 user=xchen13");
-//$db = new PDO("pgsql:dbname=ladder host=localhost password=314dev user=dev");
+//$db = new PDO("pgsql:dbname=ladder_xchen13 host=localhost password=1846485 user=xchen13");
+$db = new PDO("pgsql:dbname=ladder host=localhost password=314dev user=dev");
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $no_username_key = "Username is not provided.";
@@ -107,19 +107,11 @@ elseif($request->isPost())
 	// if inputs are all valid and matched. Start the session
 	if(!$has_error)
 	{
-		try
-		{
-			//start session
-			session_start();
-			// session_register("myusername");
-			$_SESSION["username"] = $username;
-			http_response_code(200);
-		}
-		catch(PDOException $e)
-		{
-			$results = array("error_text" => $e->getMessage());
-			http_response_code(400);
-		}
+		//start session
+		session_start();
+		// session_register("myusername");
+		$_SESSION["username"] = $username;
+		http_response_code(200);
 	}
 }
 
@@ -127,8 +119,9 @@ elseif($request->isPost())
 elseif($request->isDelete())
 {
 	session_start();
-	//$_SESSION[]
+	session_unset();
 	session_destroy();
+	http_response_code(200);
 }
 
 //Check the username exists.

@@ -11,10 +11,10 @@
 			{
 				//window.location = "http://web.cs.georgefox.edu/~xchen13/314-Ladder/login/index.php";
 				var xmlhttp = new XMLHttpRequest();
-				xmlhttp.open("GET", "player/?username = " + username);
 				xmlhttp = new XMLHttpRequest();
             	xmlhttp.onreadystatechange = function() 
             	{
+            		alert("hi");
 	                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
 	                {
 	                    alert("Logged-in page should be shown");

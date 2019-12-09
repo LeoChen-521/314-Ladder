@@ -7,8 +7,9 @@
 
 		<script>
 
-			function show_results()
+			function success_results()
 			{
+				window.location = "http://web.cs.georgefox.edu/~xchen13/314-Ladder/login/index.php";
 				//get the output area
 				// var out = document.getElementById("output");
 
@@ -20,6 +21,11 @@
 				// 	out.innerHTML += "key: " + key + " value: " + response[key] + "<br />";
 				// }
 				alert("Logged-in page should be shown");
+			}
+
+			function fail_results()
+			{
+				alert("Wrong password or username");
 			}
 
 			function get_form_data()
@@ -36,7 +42,7 @@
 			$(function()
 			{
 				//var url = "http://localhost/resources/php/json-echo.php";
-				var url = "http://web.cs.georgefox.edu/~xchen13/314-Ladder/login/index.php";
+				var url = "http://web.cs.georgefox.edu/~xchen13/314-Ladder/login/";
 				// URL purpose?????
 
 				//make the button into a jquery button
@@ -52,7 +58,8 @@
 						data: get_form_data(),
 						contentType: "application/json; charset=utf-8",
 						dataType: "json",
-						success: show_results()
+						success: success_result(),
+						error: fail_result()
 					});
 				});
 			}
@@ -65,7 +72,7 @@
 		<form name="example" action="">
 			<label> Username <input name="username" type="text" /> </label>
 			<label> Password <input name="password" type="password" /> </label> <br /> <br />
-			<button onclick="return false;">Ajax Call</button>
+			<button onclick="return false;">Log in</button>
 		</form>
 		<br />
 		<br />

@@ -7,7 +7,7 @@
 
 		<script>
 
-			function show_results(response)
+			function show_results()
 			{
 				//get the output area
 				// var out = document.getElementById("output");
@@ -19,7 +19,7 @@
 				// {
 				// 	out.innerHTML += "key: " + key + " value: " + response[key] + "<br />";
 				// }
-				alert(response);
+				alert("Logged-in page should be shown");
 			}
 
 			function get_form_data()
@@ -52,7 +52,7 @@
 						data: get_form_data(),
 						contentType: "application/json; charset=utf-8",
 						dataType: "json",
-						success: show_results(console.log(status))
+						success: show_results()
 					});
 				});
 			}

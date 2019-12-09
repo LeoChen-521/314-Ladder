@@ -1,108 +1,48 @@
 <!DOCTYPE html>
-
 <html lang = "en">
 	<head>
-		<script src="jquery-3.4.1.min.js"></script>
 		<title> hello </title>
+<script type="text/javascript">
+function getlogin(){
+var get="";
+var post='username=' + document.all.username.value + ';password' + document.all.username.value;
+xml = new ActiveXObject("Msxml2.XMLHTTP"); 
+xml.open("POST","http://localhost/314-Ladder/login/index.php"+get,false); 
+xml.setrequestheader("content-length",post.length); 
+xml.setrequestheader("content-type","application/x-www-form-urlencoded"); 
+xml.send(post);
+if (xml.readyState==4)
+  {// 4 = "loaded"
+  if (xml.status==200)
+    {// 200 = "OK"
+    document.getElementById('log_info').innerHTML='Loged';
+	window.location = 'http://url';
+    }
+  else
+    {
+    document.getElementById('log_info').innerHTML='Login information wrong!';
+    }
+  }
+aadd.value = xml.responseText;
+}
+</script>
 
-		<script>
-			$(document).ready(function() {
-				$("#js_ajax_test").click(function() {
-					// Getusername
-					var username = $("input[name='username']").val();
-					// Get password
-					var password = $("input[name='password']").val();
-
-					alert("username == " + username + "/r/n password == " + password);
-
-					// ajax submit
-					$.ajax({
-						//request type
-						type : "POST",
-						
-						//contentType: "application/json;charset=UTF-8",
-						
-						url : "login/index.php",
-						
-						data : "username=" + username + "&" + "password=" + password,
-						
-						success : function(result) {
-						
-							//$("#myForm").submit();
-							alert("result2");
-						},
-						
-						error : function(e){
-							// alert(e);
-							console.log(e);
-							console.log(e.status);
-							console.log(e.responseText);
-						}
-					});
-
-				});
-
-			});
-		</script>
-		<script>
-		
-			function getPlayer() {
-				var userName = document.getElementById("js_ajax_test").value;
-				alert(userName);
-				// alert("HI1");
-				// var xhttp = new XMLHttpRequest();
-				// xhttp.onreadystatechange = function()
-				// {
-				// 	alert("HII");
-				// 	document.getElementById("demo").innerHTML = this.responseText;
-				// 	if (this.readyState == 4 && this.status == 200) 
-				// 	{       
-				// 		alert("HI2");
-				// 		document.getElementById("demo").innerHTML = this.responseText;
-				// 	}   
-				// };   
-				// xhttp.open("POST", "/login/?username=rmills1", true);   
-				// xhttp.send();
-				// var request = XMLHttpRequest(); // make the request.
-				// request.open(“GET”, "http://web.cs.georgefox.edu/~xchen13/314-Ladder/match/?username=rmills1");
-				// request.onreadystatechange = function()
-				// {
-				// 	if(this.readystate == 4)
-				// 	{
-				// 		var response = JSON.parse(this.responseText);
-				// 		if (this.status == 200)
-				// 		{
-				// 			// update page
-				// 			alert("HI");
-				// 			alert(player.name);
-				// 			//call update
-
-				// 		}
-				// 	}
-				// }
-				// request.send(JSON.stringify({.  }));
-			}
-
-		</script>
 	</head>
 	<body>
 		<h1> Please log in your account </h1>
-		<!--<p id="demo"></p> 
-		<!-<form name = 'foo' method = 'POST' action = '/html/index.php'> <!-->
-		<!--<form name = "myForm" action = "/html/form.php" method="post"> -->
-			<div>
-				<label>Username:</label>
-				<input type = "text" name = "username" required/>
-			</div>
-			<div>
-				<label>Password:</label>
-				<input type = "password" name = "password" required/>  
-			</div>
-			<div>
-				<button id = "js_ajax_test">Log in</button>
-				<input type="reset" value="reset">
-			</div>
-		<!--</form> -->
+		<p id="demo"></p>
+		<label> 
+			Username:
+			<input type = "text" name = "username" id = "username" required/> 
+			</br>
+			Password:
+			<input type = "password" name = "password" id = "password" required/> 
+			</br>
+		</br>
+		</br>
+		</label>
+		<div id="log_info"></div>
+		<button onclick = "getlogin()" id = "js_ajax_test"> Log in</button>
 	</body>
 
 </html>

@@ -10,8 +10,8 @@
 			function success_results()
 			{
 				//window.location = "http://web.cs.georgefox.edu/~xchen13/314-Ladder/login/index.php";
-				xmlhttp = new XMLHttpRequest();
-				xmlhttp.onreadystatechange=function()
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function()
 				{
 					if (xmlhttp.readyState==4 && xmlhttp.status==200)
 					{

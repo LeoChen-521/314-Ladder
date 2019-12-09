@@ -10,28 +10,21 @@
 			function success_results()
 			{
 				//window.location = "http://web.cs.georgefox.edu/~xchen13/314-Ladder/login/index.php";
-				// var xmlhttp = new XMLHttpRequest();
-				// xmlhttp.open("GET", "player/?username = " + username);
-				// xmlhttp.onreadystatechange = function()
-				// {
-				// 	if (this.readyState==4)
-				// 	{
-				// 		var response = JSON.parse(this.responseText);
-				// 		if (this.status == 200)
-				// 		{
-				// 			alert("Logged-in page should be shown");
-				// 		}
-				// 		else
-				// 		{
-
-				// 		}
-				// 	}
-				// 	else
-				// 	{
-				// 		alert("Wrong password or username");
-				// 	}
-				// }
-				alert("1234567890");
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("GET", "player/?username = " + username);
+				xmlhttp = new XMLHttpRequest();
+            	xmlhttp.onreadystatechange = function() 
+            	{
+	                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+	                {
+	                    alert("Logged-in page should be shown");
+	                } 
+	                else 
+	           		{
+	                    alert("Wrong password or username");
+	                }
+            	}
+				//alert("1234567890");
 			}
 
 			function get_form_data()

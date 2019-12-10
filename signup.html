@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+		<script>
+
+			function sign_up_success_results(response, textStatus, errorThrown)
+			{
+				// alert(response.status);
+				// alert(textStatus);
+				// alert(errorThrown);
+				alert("Successfully added a new player!")
+			}
+
+			function fail(response, textStatus, errorThrown)
+			{
+				// alert(response.status);
+				// alert(textStatus);
+				// alert(errorThrown);
+				alert("Failed to add a new player");
+			}
+
+			
+
+			function get_form_data()
+			{
+				//get the form data
+				var form = document.forms.example2;
+
+				var data = {name:$.trim(form.yourname.value), email:$.trim(form.youremail.value), phone:$.trim(form.phonenumber.value), username:$.trim(form.yourusername.value), password:$.trim(form.yourpassword.value)};
+
+				return JSON.stringify(data);
+			}
+
+			$(function()
+			{
+				//var url = "http://localhost/resources/php/json-echo.php";
+				//var url = "http://web.cs.georgefox.edu/~xchen13/314-Ladder/login/index.php";
+				var url = "player/";
+				// URL purpose?????
+
+				//make the button into a jquery button
+				$("button").button();
+
+				//setup ajax call
+				$("button").click(function()
+				{
+					//alert("clicked!");
+					//alert(get_form_data());
+					$.ajax({
+						url: url,
+						type: "POST",
+						data: get_form_data(),
+						contentType: "application/json; charset=utf-8",
+						dataType: "text",
+						success: sign_up_success_results,
+						error: fail
+					});
+					alert("hello");
+				});
+
+
+				// $("#Add").click(function()
+				// {
+				// 	alert("added!");
+				// 	$.ajax({
+				// 		url: url,
+				// 		type: "POST",
+				// 		data: get_form_data(),
+				// 		contentType: "application/json; charset=utf-8",
+				// 		dataType: "json",
+				// 		success: sign_up_success_results,
+				// 		error: fail
+				// 	});
+				// });
+
+			}
+			);
+
+		</script>
+		
+	</head>
+
+	<body>
+		<h1> Create a new player </h1>
+		<form name="example2" action="">
+			<label> Your name <input name="yourname" type="text" /> </label>
+			<label> Your email <input name="youremail" type="text" /> </label> <br /> <br />
+			<label> Phone number <input name="phonenumber" type="text" /> </label> <br /> <br />
+			<label> create an username <input name="yourusername" type="text" /> </label> <br /> <br />
+			<label> password <input name="yourpassword" type="text" /> </label> <br /> <br />
+			<button onclick="return false;"> submit </button>
+		</form>
+		<br />
+		<br />
+		<div id="output">
+		</div>
+	</body>
+</html>

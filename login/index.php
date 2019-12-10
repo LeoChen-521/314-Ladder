@@ -38,6 +38,7 @@ elseif($request->isPost())
 		if($vars["username"] != null)
 		{
 			$username = $vars["username"];
+			//echo($username);
 		}
 		else
 		{
@@ -111,6 +112,8 @@ elseif($request->isPost())
 		session_start();
 		// session_register("myusername");
 		$_SESSION["username"] = $username;
+		$results = array();
+		echo(json_encode($results));
 		http_response_code(200);
 	}
 }

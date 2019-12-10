@@ -7,26 +7,18 @@
 
 		<script>
 
-			function success_results()
+			function success_results(response, textStatus, errorThrown)
 			{
-				//window.location = "http://web.cs.georgefox.edu/~xchen13/314-Ladder/login/index.php";
-				var xmlhttp = new XMLHttpRequest();
-				xmlhttp = new XMLHttpRequest();
-				alert(xmlhttp.status);
-            	// xmlhttp.onreadystatechange = function() 
-            	// {
-            	// 	alert("hi");
-	            //     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
-	            //     {
-	            //         alert("Logged-in page should be shown");
-	            //     } 
-	            //     else 
-	           	// 	{
-	            //         alert("Wrong password or username");
-	            //     }
-            	// }
-				//alert("1234567890");
+				window.location = "loggedIn.html";
 			}
+			function fail(response, textStatus, errorThrown)
+			{
+				// alert(response.status);
+				// alert(textStatus);
+				// alert(errorThrown);
+				alert("Failed to login");
+			}
+			
 
 			function get_form_data()
 			{
@@ -42,26 +34,37 @@
 			$(function()
 			{
 				//var url = "http://localhost/resources/php/json-echo.php";
-				var url = "http://web.cs.georgefox.edu/~xchen13/314-Ladder/login/index.php";
+				//var url = "http://web.cs.georgefox.edu/~xchen13/314-Ladder/login/index.php";
+
+				var url = "login/";
 				// URL purpose?????
 
 				//make the button into a jquery button
 				$("button").button();
 
 				//setup ajax call
-				$("button").click(function()
+				$("#Login").click(function()
 				{
-					alert("clicked!");
+					//alert("clicked!");
+					//alert(get_form_data())
 					$.ajax({
 						url: url,
 						type: "POST",
 						data: get_form_data(),
 						contentType: "application/json; charset=utf-8",
 						dataType: "json",
-						success: success_results()
-						//error: fail_result()
+						success: success_results,
+						error: fail
 					});
 				});
+
+				$("#Add").click(function()
+				{
+					//alert("added!");
+					window.location = "signup.html";
+					
+				});
+
 			}
 			);
 
@@ -72,8 +75,11 @@
 		<form name="example" action="">
 			<label> Username <input name="username" type="text" /> </label>
 			<label> Password <input name="password" type="password" /> </label> <br /> <br />
-			<button onclick="return false;">Log in</button>
+			<button id = "Login" onclick="return false;">Log in</button>
+			<button id = "Add" onclick="return false;"> Sign up </button>
 		</form>
+
+
 		<br />
 		<br />
 		<div id="output">

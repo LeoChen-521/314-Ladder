@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+		<script src = "form.js"></script>
+
+		<script>
+
+			function showMyChallenges(data, response, textStatus, errorThrown)
+			{
+				// var challengesData = JSON.parse(data);
+				// //var data = data;
+				
+
+				// var myData = JSON.parse(data);
+				// console.log(value.myData);
+				var data = JSON.parse(data);
+				var challengesData = data["challenges"];
+
+				$.each(challengesData, function(index, value){
+					var tr;
+                	tr = '<td>' + value.challenger + '</td>' + '<td>' + value.challengee + '</td>' + '<td>' + value.issued + '</td>' + '<td>' + value.accepted + '</td>' + '<td>' + value.scheduled + '</td>';
+                		$("#tabletest2").append('<tr>' + tr + '</tr>')
+				});
+            }
+
+    //         function getCurrentPlayerUsername()
+    //         {
+    //         	var form = document.forms.example4;
+
+				// // Q: How to add games in the front?
+				// var data = {winner:form.winner.value, 
+				// loser:form.loser.value, winner_score:form.winnerScore.value, loser_score:loserScore.value, played:form.time.value};
+    //         }
+
+
+            function failShowChallenges(response, textStatus, errorThrown)
+            {
+            	alert("Failed to show your challenges.")
+            }
+
+			function account_logout(data, response, textStatus, errorThrown)
+			{
+				alert("Logged out");
+				alert(response.status);
+				alert(textStatus);
+				alert(errorThrown);
+
+				window.location = "index.html";
+			}
+
+			$(function()
+			{
+
+				$(document).ready(function()
+				{
+					$.ajax({
+						url: "challenge/",
+						type: "GET",
+						data: {"player":"LC4"},
+						contentType: "application/json; charset=utf-8",
+						dataType: "text",
+						success: showMyChallenges,
+						error: failShowChallenges
+					});
+				});
+				
+				$("#Back").click(function()
+				{
+					window.location = "loggedIn.html";
+				});
+
+				// $("#Accept").click(function()
+				// {
+				// 	$.ajax({
+				// 		url: "login/",
+				// 		type: "DELETE",
+				// 		contentType: "application/json; charset=utf-8",
+				// 		dataType: "text",
+				// 		success: account_logout,
+				// 		error: fail
+				// 	});
+				// 	window.location = "match.html";
+				// });
+
+
+				$("#Logout").click(function()
+				{
+					$.ajax({
+						url: "login/",
+						type: "DELETE",
+						contentType: "application/json; charset=utf-8",
+						dataType: "text",
+						success: account_logout,
+						// error: fail
+					});
+					//window.location = "index.html";
+				});
+
+			});
+
+		</script>
+	</head>
+
+	<body>
+		<h1> My Challenges List </h1>
+
+		<table id="tabletest2">
+		    <tr>
+		    	<style> td{text-align: center;}</style>
+		        <th style = "width:200px"> challenger </th>
+		        <th style = "width:200px"> challengee</th>
+		        <th style = "width:200px"> issued</th>
+		        <th style = "width:200px"> accepted</th>
+		        <th style = "width:200px"> scheduled</th>
+		    </tr>
+		</table>
+
+
+		<button id = "Back" onclick="return false;"> Back </button>
+		<button id = "Accept" onclick="return false;"> accept this challenge </button>
+		<button id = "Logout" onclick="return false;"> Log Out </button>
+
+		<br />
+		<br />
+		<div id="output">
+		</div>
+	</body>
+</html>

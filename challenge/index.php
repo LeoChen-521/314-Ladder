@@ -631,13 +631,5 @@ function delete_after_updates($db, $challenger, $challengee)
 	$statement->execute([$challenger, $challengee, $challengee, $challenger]);
 	$db->commit();
 }
-
-
-
-
-
-
-
-
 echo(json_encode($results));
 ?>

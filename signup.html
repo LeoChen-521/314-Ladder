@@ -47,10 +47,10 @@
 				$("button").button();
 
 				//setup ajax call
-				$("button").click(function()
+				$("#signUp").click(function()
 				{
 					//alert("clicked!");
-					//alert(get_form_data());
+					alert(get_form_data());
 					$.ajax({
 						url: url,
 						type: "POST",
@@ -60,23 +60,14 @@
 						success: sign_up_success_results,
 						error: fail
 					});
-					alert("hello");
+					//alert("hello");
 				});
 
 
-				// $("#Add").click(function()
-				// {
-				// 	alert("added!");
-				// 	$.ajax({
-				// 		url: url,
-				// 		type: "POST",
-				// 		data: get_form_data(),
-				// 		contentType: "application/json; charset=utf-8",
-				// 		dataType: "json",
-				// 		success: sign_up_success_results,
-				// 		error: fail
-				// 	});
-				// });
+				$("#Back").click(function()
+				{
+					window.location = "index.html";
+				});
 
 			}
 			);
@@ -87,14 +78,16 @@
 
 	<body>
 		<h1> Create a new player </h1>
-		<form name="example2" action="">
+		<!-- questions here -->
+		<form name="example2" action="" onsubmit="return validateSignUpForm()" method="post">
 			<label> Your name <input name="yourname" type="text" /> </label>
 			<label> Your email <input name="youremail" type="text" /> </label> <br /> <br />
 			<label> Phone number <input name="phonenumber" type="text" /> </label> <br /> <br />
 			<label> create an username <input name="yourusername" type="text" /> </label> <br /> <br />
 			<label> password <input name="yourpassword" type="text" /> </label> <br /> <br />
-			<button onclick="return false;"> submit </button>
+			<button id = "signUp" onclick="return false;"> submit </button>
 		</form>
+			<button id = "Back" onclick="return false;"> Back </button>
 		<br />
 		<br />
 		<div id="output">

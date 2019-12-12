@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+		<script src = "//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"></script>
+		<script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+		<script src = "form.js"></script>
+
+		<script>
+
+			function account_logout(data, response, textStatus, errorThrown)
+			{
+				alert("Logged out");
+				alert(response.status);
+				alert(textStatus);
+				alert(errorThrown);
+
+				window.location = "index.html";
+			}
+			
+			function fail_logout(response, textStatus, errorThrown)
+			{
+				alert(response.status);
+				alert(textStatus);
+				alert(errorThrown);
+				alert("Failed to logout.");
+			}
+
+
+			function get_form_data()
+			{
+				//get the form data
+				var form = document.forms.example4;
+
+				// Q: How to add games in the front?
+				var data = {winner:form.winner.value, 
+				loser:form.loser.value, winner_score:form.winnerScore.value, loser_score:loserScore.value, played:form.time.value};
+
+				return JSON.stringify(data);
+			}
+
+			$(function()
+			{
+				//var TableBody = $("#LoggedInTableBody");
+				//var playerTable;
+				var url = "match/";
+				// URL purpose?????
+
+				//make the button into a jquery button
+				$("button").button();
+
+				//setup ajax call
+				$("#Submit").click(function()
+				{
+					//alert("clicked!");
+					//alert(get_form_data());
+					$.ajax({
+						url: url,
+						type: "POST",
+						data: get_form_data(),
+						contentType: "application/json; charset=utf-8",
+						dataType: "text",
+						success: create_match_success_results,
+						error: fail
+					});
+					//alert("hello");
+				});
+
+				$("#Back").click(function()
+				{
+					window.location = "loggedIn.html";
+				});
+
+				// Each challenges need an accept button.
+
+
+
+				$("#Logout").click(function()
+				{
+					$.ajax({
+						url: "login/",
+						type: "DELETE",
+						contentType: "application/json; charset=utf-8",
+						dataType: "text",
+						success: account_logout,
+						error: fail_logout
+					});
+					//window.location = "index.html";
+				});
+
+			});
+
+		</script>
+	</head>
+
+	<body>
+		<h1> Match result </h1>
+		<form name="example4" action="">
+			<label> winner <input name="winner" type="text" /> </label>
+			<label> loser <input name="loser" type="text" /> </label> <br /> <br />
+			<label> winner score <input name="winnerScore" type="text" /> </label> <br /> <br />
+			<label> loser score <input name="loserScore" type="text" /> </label> <br /> <br />
+			<label>  played date and time <input name="time" type="text" /> </label> <br /> <br />
+			<button id = "Submit" onclick="return false;"> submit game </button>
+		</form>
+
+
+			<button id = "Back" onclick="return false;"> Home page </button>
+			<button id = "Logout" onclick="return false;"> Log Out </button>
+		<br />
+		<br />
+		<div id="output">
+		</div>
+	</body>
+</html>

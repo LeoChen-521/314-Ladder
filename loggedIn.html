@@ -4,17 +4,170 @@
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		
+
+		<script src = "form.js"></script>
+
+		<script>
+
+			function account_logout(data, response, textStatus, errorThrown)
+			{
+				alert("Logged out");
+				alert(response.status);
+				alert(textStatus);
+				alert(errorThrown);
+
+				window.location = "index.html";
+			}
+
+			function showPlayers(data, response, textStatus, errorThrown)
+			{
+				var playersData = JSON.parse(data);
+				//var data = data;
+				$.each(playersData, function(index, value){
+					var tr;
+                	tr = '<td>' + value.rank + '</td>' + '<td>' + value.username + '</td>' + '<td>' + value.name + '</td>';
+                		$("#tabletest").append('<tr>' + tr + '</tr>')
+				});
+            }
+
+
+			function fail_logout(response, textStatus, errorThrown)
+			{
+				alert(response.status);
+				alert(textStatus);
+				alert(errorThrown);
+				alert("Failed to logout.");
+			}
+
+			function failShow(response, textStatus, errorThrown)
+			{
+				alert(response.status);
+				alert(textStatus);
+				alert(errorThrown);
+				alert("Failed to show players.");
+			}
+
+
+
+			function create_challenge_success_results(response, textStatus, errorThrown)
+			{
+    			alert("Challenge is sent!");
+			}
+
+			function fail(response, textStatus, errorThrown)
+			{
+				alert(response.status);
+				alert(textStatus);
+				alert(errorThrown);
+				alert("Failed to create a challenge.");
+			}
+
+
+			function get_form_data()
+			{
+				//get the form data
+				var form = document.forms.example3;
+
+				var data = {challenger:form.challenger.value, 
+				challengee:form.challengee.value, scheduled:form.scheduled.value};
+
+				return JSON.stringify(data);
+			}
+
+			$(function()
+			{
+
+				//alert("Hello!");
+				//alert(get_form_data());
+				$(document).ready(function()
+				{
+					$.ajax({
+						url: "showplayer/",
+						type: "GET",
+						contentType: "application/json; charset=utf-8",
+						dataType: "text",
+						success: showPlayers,
+						error: failShow
+					});
+				});
+				//alert("hello");
+
+				//var TableBody = $("#LoggedInTableBody");
+				//var playerTable;
+				var url = "challenge/";
+				// URL purpose?????
+
+				//make the button into a jquery button
+				$("button").button();
+
+				//setup ajax call
+				$("#Submit").click(function()
+				{
+					//alert("clicked!");
+					//alert(get_form_data());
+					$.ajax({
+						url: url,
+						type: "POST",
+						data: get_form_data(),
+						contentType: "application/json; charset=utf-8",
+						dataType: "text",
+						success: create_challenge_success_results,
+						error: fail
+					});
+					//alert("hello");
+				});
+
+
+				$("#ShowChallenges").click(function()
+				{
+					window.location = "myChallenges.html";
+				});
+
+				// Each challenges need an accept button.
+
+
+
+				
+				$("#Logout").click(function()
+				{
+					$.ajax({
+						url: "login/",
+						type: "DELETE",
+						contentType: "application/json; charset=utf-8",
+						dataType: "text",
+						success: account_logout,
+						error: fail_logout
+					});
+					//window.location = "index.html";
+				});
+
+			});
+
+		</script>
 	</head>
 
 	<body>
+		<h1> Player List </h1>
+
+		<table  id="tabletest">
+		    <tr>
+		        <th>rank</th>
+		        <th>username</th>
+		        <th>name</th>    
+		    </tr>
+		</table>
+
+
 		<h1> Challenge others </h1>
-		<form name="example" action="">
+		<form name="example3" action="" onsubmit="return validateChallengeForm()" method="post">
 			<label> challenger <input name="challenger" type="text" /> </label>
 			<label> challengee <input name="challengee" type="text" /> </label> <br /> <br />
 			<label> scheduled <input name="scheduled" type="text" /> </label> <br /> <br />
-			<button onclick="return false;"> submit </button>
+			<button id = "Submit" onclick="return false;"> submit challenge </button>
 		</form>
+
+			<button id = "Logout" onclick="return false;"> Log Out </button>
+			<button id = "ShowChallenges" onclick="return false;"> show my challenges </button>
 		<br />
 		<br />
 		<div id="output">

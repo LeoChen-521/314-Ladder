@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+		<script src = "form.js"></script>
+
+		<script>
+
+			function confirm_challenge_success_results(response, textStatus, errorThrown)
+			{
+				alert("challenge confirmed.");
+				window.location = "match.html";
+			}
+
+			function fail_confirm_challenge(response, textStatus, errorThrown)
+			{
+				alert("challenge failed to confirm.");
+			}
+
+			function get_form_data()
+			{
+				//get the form data
+				var form = document.forms.example5;
+
+				var data = {challenger:form.challenger.value, 
+				challengee:form.challengee.value, scheduled:form.scheduled.value, accepted:form.acceptedDate.value};
+
+				return JSON.stringify(data);
+			}
+
+			// function pre_populate_variables_challenger()
+			// {
+			// 	var currentChallenger = sessionStorage.getItem("currentChallenger");
+			// 	return currentChallenger;
+			// }
+			// function pre_populate_variables_challengee()
+			// {
+			// 	var currentChallengee = sessionStorage.getItem("currentChallengee");
+			// 	return currentChallengee;
+			// }
+			// function pre_populate_variables_challenger()
+			// {
+			// 	var currentSchedule = sessionStorage.getItem("currentSchedule");
+			// 	return currentSchedule;
+			// }
+
+			$(function()
+			{
+				 $(document).ready(function() 
+				 {
+			        // after the page elements are all loaded, then run the script
+			        // Set the input field with unique ID #email to a value
+
+			        var currentChallenger = sessionStorage.getItem("currentChallenger");
+			        var currentChallengee = sessionStorage.getItem("currentChallengee");
+			        var currentScheduled = sessionStorage.getItem("currentScheduled");
+
+			        // TODO: First two variables should be read only.
+			        document.getElementById("challenger").value = currentChallenger;
+			        document.getElementById("challengee").value = currentChallengee;
+			        document.getElementById("scheduled").value = currentScheduled;
+
+			        console.log(currentChallenger);
+			        console.log(currentChallengee);
+			        console.log(currentScheduled);
+
+			        
+			        });
+
+
+				var url = "challenge/";
+
+				//make the button into a jquery button
+				$("button").button();
+
+				//setup ajax call
+				$("#Back").click(function()
+				{
+					window.location = "myChallenges.html";
+				});
+
+
+				// update the challenge. data and time, accepted input.
+				$("#AcceptConfirm").click(function()
+				{
+
+					alert(get_form_data);
+					$.ajax({
+						url: "challenge/",
+						type: "PUT",
+						data: get_form_data(),
+						contentType: "application/json; charset=utf-8",
+						dataType: "text",
+						success: confirm_challenge_success_results,
+						error: fail_confirm_challenge
+					});
+				});
+
+				// Each challenges need an accept button.
+
+
+
+				
+				$("#Logout").click(function()
+				{
+					$.ajax({
+						url: "login/",
+						type: "DELETE",
+						contentType: "application/json; charset=utf-8",
+						dataType: "text",
+						success: account_logout,
+						error: fail_logout
+					});
+					//window.location = "index.html";
+				});
+
+			});
+
+		</script>
+	</head>
+
+	<body>
+		<h1> Confirm challenge </h1>
+		<form name="example5" action="" onsubmit="return validateChallengeForm()" method="post">
+			<label> challenger <input name="challenger" type="text" id = "challenger"/> </label>
+			<label> challengee <input name="challengee" type="text" id = "challengee"/> </label> <br /> <br />
+			<label> scheduled <input name="scheduled" type="text" id = "scheduled"/> </label> <br /> <br />
+			<label> Enter your accept date and click the confirm button to confirm the challenge <input name="acceptedDate" type="text" /> </label> <br /> <br />
+		</form>
+
+			<button id = "AcceptConfirm" onclick="return false;"> Confirm to accept this challenge</button>
+			<button id = "Logout" onclick="return false;"> Log Out </button>
+			<button id = "Back" onclick="return false;"> Back to my challenges </button>
+		<br />
+		<br />
+		<div id="output">
+		</div>
+	</body>
+</html>

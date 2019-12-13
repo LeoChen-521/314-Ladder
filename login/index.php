@@ -23,7 +23,7 @@ if($request->isGet())
 {
 	// Set the username variable and echo the results as JSON.
 	session_start();
-	$_SESSION["username"] = $username;
+	$username = $_SESSION["username"];
 	$results = '{"username": "$username"}';
 }
 

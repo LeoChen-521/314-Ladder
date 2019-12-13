@@ -9,6 +9,22 @@
 
 			function success_results(response, textStatus, errorThrown)
 			{
+				// sessionStorage.setItem("key", "hi");
+				// console.log(username);
+
+				// save current username
+				var info = get_form_data();
+				var info2 = JSON.parse(info);
+
+				// Get the username
+				
+				var current_username = info2.username;
+				//console.log(current_username);
+
+				sessionStorage.setItem("currentUsername", current_username);
+				
+
+
 				window.location = "loggedIn.html";
 			}
 			function fail(response, textStatus, errorThrown)
@@ -46,7 +62,7 @@
 				$("#Login").click(function()
 				{
 					//alert("clicked!");
-					//alert(get_form_data())
+					//alert(get_form_data());
 					$.ajax({
 						url: url,
 						type: "POST",

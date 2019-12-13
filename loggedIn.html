@@ -12,18 +12,18 @@
 			function account_logout(data, response, textStatus, errorThrown)
 			{
 				alert("Logged out");
-				alert(response.status);
-				alert(textStatus);
-				alert(errorThrown);
+				// alert(response.status);
+				// alert(textStatus);
+				// alert(errorThrown);
 
 				window.location = "index.html";
 			}
 
 			function showPlayers(data, response, textStatus, errorThrown)
 			{
-				var playersData = JSON.parse(data);
+				var myData = JSON.parse(data);
 				//var data = data;
-				$.each(playersData, function(index, value){
+				$.each(myData, function(index, value){
 					var tr;
                 	tr = '<td>' + value.rank + '</td>' + '<td>' + value.username + '</td>' + '<td>' + value.name + '</td>';
                 		$("#tabletest").append('<tr>' + tr + '</tr>')
@@ -31,19 +31,20 @@
             }
 
 
+
 			function fail_logout(response, textStatus, errorThrown)
 			{
-				alert(response.status);
-				alert(textStatus);
-				alert(errorThrown);
+				// alert(response.status);
+				// alert(textStatus);
+				// alert(errorThrown);
 				alert("Failed to logout.");
 			}
 
 			function failShow(response, textStatus, errorThrown)
 			{
-				alert(response.status);
-				alert(textStatus);
-				alert(errorThrown);
+				// alert(response.status);
+				// alert(textStatus);
+				// alert(errorThrown);
 				alert("Failed to show players.");
 			}
 
@@ -56,10 +57,10 @@
 
 			function fail(response, textStatus, errorThrown)
 			{
-				alert(response.status);
-				alert(textStatus);
-				alert(errorThrown);
-				alert("Failed to create a challenge.");
+				// alert(response.status);
+				// alert(textStatus);
+				// alert(errorThrown);
+				alert("Failed to create a challenge, please check your inputs.");
 			}
 
 
@@ -76,7 +77,6 @@
 
 			$(function()
 			{
-
 				//alert("Hello!");
 				//alert(get_form_data());
 				$(document).ready(function()

@@ -9,6 +9,46 @@
 
 		<script>
 
+
+
+			function accepted_challenge(id, response, textStatus, errorThrown)
+			{	
+				var idString = id;
+				// Get the number
+				var number = idString.substring(12);
+
+				var tableRowAcceptedIdString = "accepted" + number;
+				var current_accepted = document.getElementById(tableRowAcceptedIdString).innerText;
+
+				//console.log(current_accepted);
+
+				if(current_accepted == "null")
+				{
+					//challenger1
+					var tableRowChallengerIdString = "challenger" + number;
+					var tableRowChallengeeIdString = "challengee" + number;
+					var tableRowScheduledIdString = "scheduled" + number;
+					
+
+
+					var current_challenger = document.getElementById(tableRowChallengerIdString).innerText;
+					var current_challengee = document.getElementById(tableRowChallengeeIdString).innerText;
+					var current_scheduled = document.getElementById(tableRowScheduledIdString).innerText;
+					
+
+					sessionStorage.setItem("currentChallenger", current_challenger);
+					sessionStorage.setItem("currentChallengee", current_challengee);
+					sessionStorage.setItem("currentScheduled", current_scheduled);
+
+					window.location = "updateChallenge.html";
+				}
+				else
+				{
+					alert("This challenge has already been accepted.");
+				}
+
+			}
+
 			function showMyChallenges(data, response, textStatus, errorThrown)
 			{
 				// var challengesData = JSON.parse(data);
@@ -22,20 +62,10 @@
 
 				$.each(challengesData, function(index, value){
 					var tr;
-                	tr = '<td>' + value.challenger + '</td>' + '<td>' + value.challengee + '</td>' + '<td>' + value.issued + '</td>' + '<td>' + value.accepted + '</td>' + '<td>' + value.scheduled + '</td>';
+                	tr = '<td id = "challenger' + index + '">' + value.challenger + '</td>' + '<td id = "challengee' + index +'">' + value.challengee + '</td>' + '<td>' + value.issued + '</td>' + '<td id = "accepted' + index + '">' + value.accepted + '</td>' + '<td id = "scheduled' + index +'">' + value.scheduled + '</td>' + '<td>' + "<button id = 'acceptButton" + index + "' onclick=accepted_challenge(id)> accept this challenge </button>" + '</td>';
                 		$("#tabletest2").append('<tr>' + tr + '</tr>')
-				});
-            }
-
-    //         function getCurrentPlayerUsername()
-    //         {
-    //         	var form = document.forms.example4;
-
-				// // Q: How to add games in the front?
-				// var data = {winner:form.winner.value, 
-				// loser:form.loser.value, winner_score:form.winnerScore.value, loser_score:loserScore.value, played:form.time.value};
-    //         }
-
+				});            
+			}
 
             function failShowChallenges(response, textStatus, errorThrown)
             {
@@ -45,9 +75,9 @@
 			function account_logout(data, response, textStatus, errorThrown)
 			{
 				alert("Logged out");
-				alert(response.status);
-				alert(textStatus);
-				alert(errorThrown);
+				// alert(response.status);
+				// alert(textStatus);
+				// alert(errorThrown);
 
 				window.location = "index.html";
 			}
@@ -57,10 +87,13 @@
 
 				$(document).ready(function()
 				{
+					var currentPerson = sessionStorage.getItem("currentUsername");
+					console.log(currentPerson);
 					$.ajax({
 						url: "challenge/",
 						type: "GET",
-						data: {"player":"LC4"},
+						// data: {"player":"LC4"},
+						data: {"player":currentPerson},
 						contentType: "application/json; charset=utf-8",
 						dataType: "text",
 						success: showMyChallenges,
@@ -72,19 +105,6 @@
 				{
 					window.location = "loggedIn.html";
 				});
-
-				// $("#Accept").click(function()
-				// {
-				// 	$.ajax({
-				// 		url: "login/",
-				// 		type: "DELETE",
-				// 		contentType: "application/json; charset=utf-8",
-				// 		dataType: "text",
-				// 		success: account_logout,
-				// 		error: fail
-				// 	});
-				// 	window.location = "match.html";
-				// });
 
 
 				$("#Logout").click(function()
@@ -121,8 +141,8 @@
 
 
 		<button id = "Back" onclick="return false;"> Back </button>
-		<button id = "Accept" onclick="return false;"> accept this challenge </button>
 		<button id = "Logout" onclick="return false;"> Log Out </button>
+
 
 		<br />
 		<br />

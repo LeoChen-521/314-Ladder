@@ -13,21 +13,27 @@
 
 		<script>
 
+			function create_match_success_results(data, response, textStatus, errorThrown)
+			{
+				alert("match has been reported!");
+			}
+
+
 			function account_logout(data, response, textStatus, errorThrown)
 			{
 				alert("Logged out");
-				alert(response.status);
-				alert(textStatus);
-				alert(errorThrown);
+				// alert(response.status);
+				// alert(textStatus);
+				// alert(errorThrown);
 
 				window.location = "index.html";
 			}
 			
 			function fail_logout(response, textStatus, errorThrown)
 			{
-				alert(response.status);
-				alert(textStatus);
-				alert(errorThrown);
+				// alert(response.status);
+				// alert(textStatus);
+				// alert(errorThrown);
 				alert("Failed to logout.");
 			}
 
@@ -38,8 +44,8 @@
 				var form = document.forms.example4;
 
 				// Q: How to add games in the front?
-				var data = {winner:form.winner.value, 
-				loser:form.loser.value, winner_score:form.winnerScore.value, loser_score:loserScore.value, played:form.time.value};
+				var data = {games:[{winner:form.winner.value, loser:form.loser.value, winner_score:form.winnerScore.value, loser_score:form.loserScore.value}], played:form.time.value};
+				// var data2 = "{games:[" + data + 
 
 				return JSON.stringify(data);
 			}
@@ -68,7 +74,7 @@
 						success: create_match_success_results,
 						error: fail
 					});
-					//alert("hello");
+					alert("hello");
 				});
 
 				$("#Back").click(function()

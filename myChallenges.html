@@ -18,6 +18,7 @@
 				var number = idString.substring(12);
 
 				var tableRowAcceptedIdString = "accepted" + number;
+				console.log(tableRowAcceptedIdString);
 				var current_accepted = document.getElementById(tableRowAcceptedIdString).innerText;
 
 				//console.log(current_accepted);
@@ -46,13 +47,66 @@
 				{
 					alert("This challenge has already been accepted.");
 				}
+			}
 
+			function reject_challenge(id, response, textStatus, errorThrown)
+			{
+				var idString = id;
+				//Get the number
+				var number = idString.substring(12);
+
+				var tableRowAcceptedIdString = "accepted" + number;
+				var current_accepted = document.getElementById(tableRowAcceptedIdString).innerText;
+
+				//console.log(current_accepted);
+
+				if(current_accepted == "null")
+				{
+					var tableRowChallengerIdString = "challenger" + number;
+					var tableRowChallengeeIdString = "challengee" + number;
+					var tableRowScheduledIdString = "scheduled" + number;
+
+					var current_challenger = document.getElementById(tableRowChallengerIdString).innerText;
+					var current_challengee = document.getElementById(tableRowChallengeeIdString).innerText;
+					var current_scheduled = document.getElementById(tableRowScheduledIdString).innerText;
+
+					// console.log(current_challenger);
+					// console.log(current_challengee);
+					// console.log(current_scheduled);
+
+					
+
+					var deleteInfo = {challenger:current_challenger, challengee:current_challengee, scheduled:current_scheduled}; 
+					var deleteInfo2 = JSON.stringify(deleteInfo);
+
+					console.log(deleteInfo2);
+
+
+
+					$.ajax({
+						url: "challenge/",
+						type: "DELETE",
+						// data: {"player":"LC4"},
+						data: deleteInfo2,
+						contentType: "application/json; charset=utf-8",
+						dataType: "text",
+						success: successRejectChallenge,
+						error: failRejectChallenges
+					});
+
+					// alert("This challenge has been rejected.");
+				}
+				else
+				{
+					alert("This challenge has already been accepted.");
+				}
 			}
 
 			function showMyChallenges(data, response, textStatus, errorThrown)
 			{
 				// var challengesData = JSON.parse(data);
 				// //var data = data;
+				//alert("This challenge has been rejected.");
 				
 
 				// var myData = JSON.parse(data);
@@ -62,13 +116,29 @@
 
 				$.each(challengesData, function(index, value){
 					var tr;
-                	tr = '<td id = "challenger' + index + '">' + value.challenger + '</td>' + '<td id = "challengee' + index +'">' + value.challengee + '</td>' + '<td>' + value.issued + '</td>' + '<td id = "accepted' + index + '">' + value.accepted + '</td>' + '<td id = "scheduled' + index +'">' + value.scheduled + '</td>' + '<td>' + "<button id = 'acceptButton" + index + "' onclick=accepted_challenge(id)> accept this challenge </button>" + '</td>';
+                	tr = '<td id = "challenger' + index + '">' + value.challenger + '</td>' + '<td id = "challengee' + index +'">' + value.challengee + '</td>' + '<td>' + value.issued + '</td>' + '<td id = "accepted' + index + '">' + value.accepted + '</td>' + '<td id = "scheduled' + index +'">' + value.scheduled + '</td>' + '<td>' + "<button id = 'acceptButton" + index + "' onclick=accepted_challenge(id)> accept this challenge </button>" + '</td>' + '<td>' + "<button id = 'RejectButton" + index + "' onclick=reject_challenge(id)> reject this challenge </button>" + '</td>';
                 		$("#tabletest2").append('<tr>' + tr + '</tr>')
 				});            
 			}
+			function successRejectChallenge(data, response, textStatus, errorThrown)
+			{
+				console.log(data);
+				alert("Challenge has been rejected.")
+				window.location = "myChallenges.html";
+			}
 
-            function failShowChallenges(response, textStatus, errorThrown)
+			function failRejectChallenges(data, response, textStatus, errorThrown)
             {
+            	alert(response.status);
+            	alert(textStatus);
+            	alert(errorThrown);
+
+            	alert("Failed to reject this challenge.")
+            }
+
+            function failShowChallenges(data, response, textStatus, errorThrown)
+            {
+            	console.log(data);
             	alert("Failed to show your challenges.")
             }
 

@@ -77,11 +77,14 @@
 
 			$(function()
 			{
-				// var currentUsername = sessionStorage.getItem("currentUsername");
+				var currentUsername = sessionStorage.getItem("currentUsername");
 				// document.getElementById("challenger").value = currentUsername;
 				// console.log(currentUsername)
 				//alert("Hello!");
 				//alert(get_form_data());
+				//console.log(currentUsername);
+				document.getElementById("challenger").value = currentUsername;
+
 				$(document).ready(function()
 				{
 					$.ajax({
@@ -163,7 +166,7 @@
 
 		<h1> Challenge others </h1>
 		<form name="example3" action="" onsubmit="return validateChallengeForm()" method="post">
-			<label> challenger <input name="challenger" type="text" /> </label>
+			<label> challenger <input name="challenger" type="text" id = "challenger" readonly/> </label>
 			<label> challengee <input name="challengee" type="text" /> </label> <br /> <br />
 			<label> scheduled <input name="scheduled" type="text" /> </label> <br /> <br />
 			<button id = "Submit" onclick="return false;"> submit challenge </button>

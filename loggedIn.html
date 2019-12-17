@@ -5,8 +5,6 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-		<script src = "form.js"></script>
-
 		<script>
 
 			function account_logout(data, response, textStatus, errorThrown)
@@ -69,8 +67,41 @@
 				//get the form data
 				var form = document.forms.example3;
 
-				var data = {challenger:form.challenger.value, 
-				challengee:form.challengee.value, scheduled:form.scheduled.value};
+				var hasError = false;
+				var myChallengee = form.challengee.value;
+				var myScheduled = form.scheduled.value;
+
+				if(myChallengee == "")
+				{
+					alert("Challengee must be filled out");
+					hasError = true;
+					return false;
+				}
+				if(myScheduled == "")
+				{
+					alert("scheduled must be filled out");
+					hasError = true;
+					return false;
+				}
+
+				if(myScheduled != "")
+				{
+					// const regExp = /^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/;
+
+					const regExp = /^(\d{4})-(0\d{1}|1[0-2])-(0\d{1}|[12]\d{1}|3[01]) (0\d{1}|1\d{1}|2[0-3]):[0-5]\d{1}:([0-5]\d{1})$/;
+					if(!regExp.test(myScheduled))
+					{
+    					alert("Scheduled format is invalid. Scheduled form must be like YYYY-MM-DD 00:00:00");
+    					hasError = true;
+						return false;
+					} 
+				}
+
+				if(!hasError)
+				{
+					var data = {challenger:form.challenger.value, 
+					challengee:form.challengee.value, scheduled:form.scheduled.value};
+				}
 
 				return JSON.stringify(data);
 			}
@@ -165,6 +196,8 @@
 
 
 		<h1> Challenge others </h1>
+		<p> Be careful that you can only challenge the players: who are at most ranked 3 spots above, who are not ranked below you, and who are not a party to an outstanding challenge that has been accepted.<P>
+
 		<form name="example3" action="" onsubmit="return validateChallengeForm()" method="post">
 			<label> challenger <input name="challenger" type="text" id = "challenger" readonly/> </label>
 			<label> challengee <input name="challengee" type="text" /> </label> <br /> <br />

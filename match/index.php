@@ -213,14 +213,14 @@ elseif($request->isPost())
 			if(array_key_exists("winner_score", $games[$i])) //-1?
 			{
 				$winner_score = $games[$i]["winner_score"];
-				if ($winner_score != 10)
-				{
-					$results = array("error_text" => "Invalid winner score");
-					$has_error = true;
-					http_response_code(400);
-					echo(json_encode($results));
-					return;
-				}
+				// if ($winner_score != 10)
+				// {
+				// 	$results = array("error_text" => "Invalid winner score");
+				// 	$has_error = true;
+				// 	http_response_code(400);
+				// 	echo(json_encode($results));
+				// 	return;
+				// }
 			}
 			else
 			{
@@ -232,14 +232,14 @@ elseif($request->isPost())
 			if(array_key_exists("loser_score", $games[$i]))
 			{
 				$loser_score = $games[$i]["loser_score"];
-				if ($loser_score < 0 || $loser_score === 10)
-				{
-					$results = array("error_text" => "Invalid loser score");
-					$has_error = true;
-					http_response_code(400);
-					echo(json_encode($results));
-					return;
-				}
+				// if ($loser_score < 0 || $loser_score === 10)
+				// {
+				// 	$results = array("error_text" => "Invalid loser score");
+				// 	$has_error = true;
+				// 	http_response_code(400);
+				// 	echo(json_encode($results));
+				// 	return;
+				// }
 			}
 			else
 			{

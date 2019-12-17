@@ -5,10 +5,6 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-
-
-		<script src = "form.js"></script>
-
 		<script>
 
 			function create_match_success_results(data, response, textStatus, errorThrown)
@@ -45,11 +41,104 @@
 			{
 				//get the form data
 				var form = document.forms.example4;
+				var hasError = false;
+				var myWinner = form.winner.value;
+				var myLoser = form.loser.value;
+				var myPlayed = form.time.value;
+				var myWinnerScore = Number(form.winnerScore.value);
+				var myLoserScore = Number(form.loserScore.value);
 
-				// Q: How to add games in the front?
-				var data = {games:[{winner:form.winner.value, loser:form.loser.value, winner_score:form.winnerScore.value, loser_score:form.loserScore.value}], played:form.time.value};
-				// var data2 = "{games:[" + data + 
+				console.log(myWinner);
+				console.log(myLoser);
 
+
+				console.log(myWinnerScore);
+				console.log(myLoserScore);
+
+
+				var player1 = sessionStorage.getItem("currentPlayer1");
+			    var player2 = sessionStorage.getItem("currentPlayer2");
+			    console.log(player1);
+			    console.log(player2);
+
+				if(myWinner == "")
+				{
+					alert("Winner must be filled out");
+					hasError = true;
+					return false;
+				}
+
+				if(myLoser == "")
+				{
+					alert("Loser must be filled out");
+					hasError = true;
+					return false;
+				}
+				if(myWinnerScore == "")
+				{
+					alert("Winner score must be filled out");
+					hasError = true;
+					return false;
+				}
+				if(myLoserScore == "")
+				{
+					alert("Loser score must be filled out");
+					hasError = true;
+					return false;
+				}
+				if(myWinnerScore <= 0)
+				{
+					alert("The winner score is invalid");
+					hasError = true;
+					return false;
+				}
+				if(myLoserScore < 0)
+				{
+					alert("The loser score is invalid");
+					hasError = true;
+					return false;
+				}
+
+				if(myLoserScore >= myWinnerScore)
+				{
+					alert("Winner score has to be larger than loser score");
+					hasError = true;
+					return false;
+				}
+
+				if((myWinner !== player1) && (myWinner !== player2))
+				{
+					alert("The winner is neither current challenger nor challengee");
+					hasError = true;
+					return false;
+				}
+
+				if((myLoser !== player1) && (myLoser !== player2))
+				{
+					alert("The loser is neither current challenger nor challengee");
+					hasError = true;
+					return false;
+				}
+
+				if(myWinner === myLoser)
+				{
+					alert("Winner and loser cannot be the same");
+				}
+
+				if(myPlayed != "")
+				{
+					const regExp4 = /^(\d{4})-(0\d{1}|1[0-2])-(0\d{1}|[12]\d{1}|3[01]) (0\d{1}|1\d{1}|2[0-3]):[0-5]\d{1}:([0-5]\d{1})$/;
+					if(!regExp4.test(myPlayed))
+					{
+    					alert("played date and time format is invalid. Form must be like YYYY-MM-DD 00:00:00");
+    					hasError = true;
+						return false;
+					} 
+				}
+				if(!hasError)
+				{
+					var data = {games:[{winner:form.winner.value, loser:form.loser.value, winner_score:form.winnerScore.value, loser_score:form.loserScore.value}], played:form.time.value};
+				}
 				return JSON.stringify(data);
 			}
 
@@ -68,7 +157,7 @@
 				{
 					//alert("clicked!");
 					//alert(get_form_data());
-					console.log(get_form_data());
+					//console.log(get_form_data());
 					$.ajax({
 						url: url,
 						type: "POST",

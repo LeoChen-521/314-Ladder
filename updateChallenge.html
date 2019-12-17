@@ -5,12 +5,23 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-		<script src = "form.js"></script>
-
 		<script>
 
 			function confirm_challenge_success_results(response, textStatus, errorThrown)
 			{
+				var info = get_form_data();
+				var info2 = JSON.parse(info);
+
+				// Get the username
+				
+				var current_player1 = info2.challenger;
+				var current_player2 = info2.challengee;
+				//console.log(current_username);
+
+				sessionStorage.setItem("currentPlayer1", current_player1);
+				sessionStorage.setItem("currentPlayer2", current_player2);
+
+
 				alert("challenge confirmed.");
 				window.location = "match.html";
 			}
@@ -25,8 +36,52 @@
 				//get the form data
 				var form = document.forms.example5;
 
-				var data = {challenger:form.challenger.value, 
-				challengee:form.challengee.value, scheduled:form.scheduled.value, accepted:form.acceptedDate.value};
+				var hasError = false;
+				var myScheduled = form.scheduled.value;
+				var myAccepted = form.acceptedDate.value;
+
+				if(myScheduled == "")
+				{
+					alert("Scheduled must be filled out");
+					hasError = true;
+					return false;
+				}
+
+				if(myAccepted == "")
+				{
+					alert("Accepted date must be filled out");
+					hasError = true;
+					return false;
+				}
+
+				if(myScheduled != "")
+				{
+					const regExp2 = /^(\d{4})-(0\d{1}|1[0-2])-(0\d{1}|[12]\d{1}|3[01]) (0\d{1}|1\d{1}|2[0-3]):[0-5]\d{1}:([0-5]\d{1})$/;
+					if(!regExp2.test(myScheduled))
+					{
+    					alert("Scheduled format is invalid. Scheduled form must be like YYYY-MM-DD 00:00:00");
+    					hasError = true;
+						return false;
+					} 
+				}
+
+
+				if(myAccepted != "")
+				{
+					const regExp3 = /^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/;
+
+					if(!regExp3.test(myAccepted))
+					{
+    					alert("Accepted format is invalid. Accepted form must be like YYYY-MM-DD");
+    					hasError = true;
+						return false;
+					} 
+				}
+
+				if(!hasError)
+				{
+					var data = {challenger:form.challenger.value, challengee:form.challengee.value, scheduled:myScheduled, accepted:myAccepted};
+				}
 
 				return JSON.stringify(data);
 			}
@@ -63,9 +118,9 @@
 			        document.getElementById("challengee").value = currentChallengee;
 			        document.getElementById("scheduled").value = currentScheduled;
 
-			        console.log(currentChallenger);
-			        console.log(currentChallengee);
-			        console.log(currentScheduled);
+			        // console.log(currentChallenger);
+			        // console.log(currentChallengee);
+			        // console.log(currentScheduled);
 
 			        
 			        });
@@ -86,8 +141,7 @@
 				// update the challenge. data and time, accepted input.
 				$("#AcceptConfirm").click(function()
 				{
-
-					//alert(get_form_data);
+					// alert(get_form_data());
 					$.ajax({
 						url: "challenge/",
 						type: "PUT",

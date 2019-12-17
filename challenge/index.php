@@ -403,15 +403,15 @@ elseif($request->isPut())
 	}
 
 
-	// If there is no such challenge exists, print the error.
-	// if(!challenge_exists($db, $challenger, $challengee, $scheduled))
-	// {
-	// 	$results = array("error_text" => $no_such_challenge);
-	// 	$has_error = true;
-	// 	http_response_code(400);
-	// 	echo(json_encode($results));
-	// 	return;
-	// }
+	//If there is no such challenge exists, print the error.
+	if(!challenge_exists($db, $challenger, $challengee, $scheduled))
+	{
+		$results = array("error_text" => $no_such_challenge);
+		$has_error = true;
+		http_response_code(400);
+		echo(json_encode($results));
+		return;
+	}
 
 	if(!$has_error)
 	{

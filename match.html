@@ -123,6 +123,8 @@
 				if(myWinner === myLoser)
 				{
 					alert("Winner and loser cannot be the same");
+					hasError = true;
+					return false;
 				}
 
 				if(myPlayed != "")
